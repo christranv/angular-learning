@@ -1,6 +1,8 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { products } from '../products';
+import { CartService } from '../cart.service';
+import { Product } from '../models/product.model';
+import { products } from '../data/';
 
 @Component({
   selector: 'app-product-details',
@@ -9,9 +11,12 @@ import { products } from '../products';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductDetailsComponent implements OnInit {
-  product: any;
+  product: Product | undefined;
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(
+    private route: ActivatedRoute,
+    private cartService: CartService
+  ) {}
 
   ngOnInit(): void {
     // First get the product id from the current route.
@@ -22,5 +27,10 @@ export class ProductDetailsComponent implements OnInit {
     this.product = products.find(
       (product) => product.id === productIdFromRoute
     );
+  }
+
+  addToCart(product: any) {
+    this.cartService.addToCart(product);
+    window.alert('Your product has been added to the cart!');
   }
 }
